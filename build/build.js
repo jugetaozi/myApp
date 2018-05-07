@@ -11,7 +11,7 @@ const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
 
-const spinner = ora('building for production...')
+const spinner = ora('编译构建中')
 spinner.start()
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
@@ -28,14 +28,14 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     }) + '\n\n')
 
     if (stats.hasErrors()) {
-      console.log(chalk.red('  Build failed with errors.\n'))
+      console.log(chalk.red('  编译构建失败.\n'))
       process.exit(1)
     }
 
-    console.log(chalk.cyan('  Build complete.\n'))
+    console.log(chalk.cyan('  编译构建成功.\n'))
     console.log(chalk.yellow(
-      '  Tip: built files are meant to be served over an HTTP server.\n' +
-      '  Opening index.html over file:// won\'t work.\n'
+      '  提示:构建的文件必须忘在web容器下运行.\n' +
+      '  直接打开index.html 将不能运行.\n'
     ))
   })
 })

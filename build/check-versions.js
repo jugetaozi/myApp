@@ -1,10 +1,16 @@
 'use strict'
+//定义控制台日志的输入样式
 const chalk = require('chalk')
+//加载语义化版本测试库
 const semver = require('semver')
+//引入package.json文件
 const packageConfig = require('../package.json')
+//插件是shelljs 执行*nix系统命令
 const shell = require('shelljs')
 
 function exec (cmd) {
+  //脚本可以通过child_process模块新建子进程 从而执行unix系统命令
+  //require("child_process")调用nodejs子进程
   return require('child_process').execSync(cmd).toString().trim()
 }
 
