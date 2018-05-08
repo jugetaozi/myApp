@@ -11,13 +11,18 @@ const shell = require('shelljs')
 function exec (cmd) {
   //脚本可以通过child_process模块新建子进程 从而执行unix系统命令
   //require("child_process")调用nodejs子进程
+  //execSync同步的exec方法执行command
   return require('child_process').execSync(cmd).toString().trim()
 }
 
 const versionRequirements = [
   {
     name: 'node',
+    //process.version是当前使用的node版本信息
+    //semver.clean(' v=1.2.3')返回1.2.3
+    //semver.clean格式化返回当前使用的node版本信息
     currentVersion: semver.clean(process.version),
+    //从package.json读取node版本最低要求
     versionRequirement: packageConfig.engines.node
   }
 ]
@@ -25,7 +30,9 @@ const versionRequirements = [
 if (shell.which('npm')) {
   versionRequirements.push({
     name: 'npm',
+    //自动调用npm --version命令 并且把参数返回给exec函数 从而获取纯净的版本号
     currentVersion: exec('npm --version'),
+    //从package.json读取npm版本要求
     versionRequirement: packageConfig.engines.npm
   })
 }

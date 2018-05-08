@@ -4,17 +4,34 @@
 
 const path = require('path')
 
+var hostName = 'http://192.168.102.237:8080'//联调环境
+
+if(process.argv[2] && process.argv[2] === 'mock'){
+  hostName = 'http://192.168.102.220:7300/mock/59c231321sa32fd'
+}else if (process.argv[2] && process.argv[2] === 'local'){
+  hostName = 'http://localhost:8080'
+}
+
+var port = 8080;
+var _port = Number(process.argv[3]);
+if (_port && Number.isInteger(_port)){
+  port = _port;
+}
+
 module.exports = {
   dev: {
 
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      // '/bos':{target:hostName,changeOrigin:true,pathRewrite:{'^/bos':'/bos'}},
+      // '/bos/websocket':{target:hostName,ws:true,changeOrigin:true,pathRewrite:{'^/bos/websocket':'/bos/websocket'}}
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: port, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -64,7 +81,7 @@ module.exports = {
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
+    productionGzip: true,
     productionGzipExtensions: ['js', 'css'],
 
     // Run the build command with an extra argument to

@@ -1,8 +1,13 @@
 'use strict'
 const path = require('path')
 const utils = require('./utils')
+const os = require('os')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const HappyPack = require('happypack')
+const HappyPackThreadPool = HappyPack.ThreadPool({
+  size: os.cpus().length
+})
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -13,6 +18,7 @@ const createLintingRule = () => ({
   loader: 'eslint-loader',
   enforce: 'pre',
   include: [resolve('src'), resolve('test')],
+  exclude: [resolve('src/components'),resolve('src/assets'),resolve('src/libs')], //忽略components
   options: {
     formatter: require('eslint-friendly-formatter'),
     emitWarning: !config.dev.showEslintErrorsInOverlay
@@ -36,7 +42,24 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-    }
+      'assets': resolve('src/assets'),
+      'cps': resolve('src/components'),
+      'views': resolve('src/views'),
+      'layout': resolve('src/layout'),
+      'config': resolve('src/config'),
+      'utils': resolve('src/utils'),
+      'store': resolve('src/store'),
+      'directives': resolve('src/directives'),
+      'filters': resolve('src/filters'),
+      'mixins': resolve('src/mixins'),
+      'plugins': resolve('src/plugins'),
+      'register': resolve('src/register'),
+      'libs': resolve('src/libs'),
+      'apis': resolve('src/apis'),
+      'router': resolve('src/router'),
+      'common': resolve('src/common'),
+    },
+    symlinks: false
   },
   module: {
     rules: [
@@ -88,5 +111,12 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+  plugins: [
+    new HappyPack({
+      id:'happybabel',
+      loaders:['babel-loader'],
+      threads:HappyPackThreadPool.size
+    })
+  ]
 }
